@@ -1,12 +1,18 @@
-import * as sendgrid from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 import * as dotenv from 'dotenv';
 import { EmailDto } from './dtos/email.dto';
 
 dotenv.config();
 
-sendgrid.setApiKey(
-  process.env.SENDGRID_API_KEY
-);
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: 'true' === process.env.SMTP_SECURE,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
 
 export const sendEmail = async (EmailDto: EmailDto): Promise<boolean> => {
   try {
@@ -18,10 +24,11 @@ export const sendEmail = async (EmailDto: EmailDto): Promise<boolean> => {
       html: EmailDto.emailHtml,
       attachments: EmailDto.emailAttachments
     };
-    return await sendgrid.send(msg).then(() => true).catch(() => false);
-
+    return await transporter
+      .sendMail(msg)
+      .then(() => true)
+      .catch(() => false);
   } catch (error) {
     return false;
   }
-
 };

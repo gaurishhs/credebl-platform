@@ -25,7 +25,8 @@ export class AwsService {
     this.s3StoreObject = new S3({
       accessKeyId: process.env.AWS_S3_STOREOBJECT_ACCESS_KEY,
       secretAccessKey: process.env.AWS_S3_STOREOBJECT_SECRET_KEY,
-      region: process.env.AWS_S3_STOREOBJECT_REGION
+      region: process.env.AWS_S3_STOREOBJECT_REGION,
+      signatureVersion: 'v4'
     });
   }
 
@@ -49,7 +50,9 @@ export class AwsService {
         ContentType: `image/png`
       });
 
-      const imageUrl = `https://${bucketName}.s3.${process.env.AWS_PUBLIC_REGION}.amazonaws.com/${pathAWS}/${encodeURIComponent(filename)}-${timestamp}.${ext}`;
+      const imageUrl = `https://${bucketName}.s3.${
+        process.env.AWS_PUBLIC_REGION
+      }.amazonaws.com/${pathAWS}/${encodeURIComponent(filename)}-${timestamp}.${ext}`;
       return imageUrl;
     } catch (error) {
       throw new HttpException(error, HttpStatus.SERVICE_UNAVAILABLE);
