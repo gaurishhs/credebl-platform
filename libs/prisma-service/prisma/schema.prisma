@@ -154,7 +154,11 @@ model platform_config {
   externalIp          String    @db.VarChar
   inboundEndpoint     String?   @db.VarChar
   username            String    @db.VarChar
-  sgApiKey            String    @db.VarChar
+  smtpHost            String    @db.VarChar
+  smtpPort            Int       @default(587)
+  smtpSecure          Boolean   @default(false)
+  smtpUser            String    @db.VarChar
+  smtpPass            String    @db.VarChar
   emailFrom           String    @db.VarChar
   apiEndpoint         String    @db.VarChar
   tailsFileServer     String    @db.VarChar

@@ -677,7 +677,11 @@ export class UserRepository {
         data: {
           externalIp: updatePlatformSettings.externalIp,
           inboundEndpoint: updatePlatformSettings.inboundEndpoint,
-          sgApiKey: updatePlatformSettings.sgApiKey,
+          smtpHost: updatePlatformSettings.smtpHost,
+          smtpPort: updatePlatformSettings.smtpPort,
+          smtpSecure: updatePlatformSettings.smtpSecure,
+          smtpUser: updatePlatformSettings.smtpUser,
+          smtpPass: updatePlatformSettings.smtpPass,
           emailFrom: updatePlatformSettings.emailFrom,
           apiEndpoint: updatePlatformSettings.apiEndPoint
         }
@@ -700,7 +704,14 @@ export class UserRepository {
     }
   }
 
-  async updateOrgDeletedActivity(orgId: string, userId: string, deletedBy: string, recordType: RecordType, userEmail: string, txnMetadata: object): Promise<IUserDeletedActivity> {
+  async updateOrgDeletedActivity(
+    orgId: string,
+    userId: string,
+    deletedBy: string,
+    recordType: RecordType,
+    userEmail: string,
+    txnMetadata: object
+  ): Promise<IUserDeletedActivity> {
     try {
       const orgDeletedActivity = await this.prisma.user_org_delete_activity.create({
         data: {
@@ -754,10 +765,12 @@ export class UserRepository {
       });
 
       // Create a map for quick lookup of keycloakUserId, id, and email by email
-      const userMap = new Map(users.map(user => [user.email, { id: user.id, keycloakUserId: user.keycloakUserId, email: user.email }]));
+      const userMap = new Map(
+        users.map((user) => [user.email, { id: user.id, keycloakUserId: user.keycloakUserId, email: user.email }])
+      );
 
       // Collect the keycloakUserId, id, and email in the order of input emails
-      const result = userEmails.map(email => {
+      const result = userEmails.map((email) => {
         const user = userMap.get(email);
         return { id: user?.id || null, keycloakUserId: user?.keycloakUserId || null, email };
       });
@@ -768,7 +781,7 @@ export class UserRepository {
       throw error;
     }
   }
-  
+
   async storeUserRole(userId: string, userRoleId: string): Promise<UserRoleMapping> {
     try {
       const userRoleMapping = await this.prisma.user_role_mapping.create({
@@ -798,20 +811,18 @@ export class UserRepository {
     }
   }
 
-   // eslint-disable-next-line camelcase
-   async handleGetUserOrganizations(userId: string): Promise<user_org_roles[]> {
-    try {  
+  // eslint-disable-next-line camelcase
+  async handleGetUserOrganizations(userId: string): Promise<user_org_roles[]> {
+    try {
       const getUserOrgs = await this.prisma.user_org_roles.findMany({
         where: {
           userId
         }
       });
-  
+
       return getUserOrgs;
     } catch (error) {
-      this.logger.error(
-        `Error in handleGetUserOrganizations: ${error.message}`
-      );
+      this.logger.error(`Error in handleGetUserOrganizations: ${error.message}`);
       throw error;
     }
   }

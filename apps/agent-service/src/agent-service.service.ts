@@ -232,7 +232,6 @@ export class AgentServiceService {
       this._agentSpinup(
         walletProvisionPayload,
         agentSpinupDto,
-        platformConfig?.sgApiKey,
         orgData,
         user,
         socket,
@@ -477,7 +476,6 @@ export class AgentServiceService {
   async _agentSpinup(
     walletProvisionPayload: IWalletProvision,
     agentSpinupDto: IAgentSpinupDto,
-    orgApiKey: string,
     orgData: organisation,
     user: IUserRequestInterface,
     socket: Socket,

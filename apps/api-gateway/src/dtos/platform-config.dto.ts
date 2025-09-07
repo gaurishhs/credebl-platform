@@ -1,21 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PlatformConfigDto {
-    @ApiProperty()
-    externalIP: string;
+  @ApiProperty()
+  externalIP: string;
 
-    @ApiProperty()
-    genesisURL: string;
+  @ApiProperty()
+  genesisURL: string;
 
-    @ApiProperty()
-    lastInternalIP: string;
+  @ApiProperty()
+  lastInternalIP: string;
 
-    @ApiProperty()
-    sgUsername: string;
+  @ApiProperty()
+  sgUsername: string;
 
-    @ApiProperty()
-    sgApiKey: string;
+  @ApiProperty()
+  smtpHost: string;
 
-    @ApiProperty()
-    sgEmailFrom: string;
+  @ApiProperty()
+  smtpPort: number;
+
+  @ApiProperty()
+  smtpSecure: boolean;
+
+  @ApiProperty()
+  smtpUser: string;
+
+  @ApiProperty()
+  smtpPass: string;
+
+  @ApiProperty()
+  emailFrom: string;
 }
